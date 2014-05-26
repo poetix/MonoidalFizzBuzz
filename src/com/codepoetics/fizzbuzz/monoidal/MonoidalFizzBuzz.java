@@ -17,7 +17,6 @@ public class MonoidalFizzBuzz<T, I extends Interpreter<T>, M extends Monoid<T>, 
     @Override
     public String apply(Integer integer) {
         T product = interpreter.interpret(integer)
-                               .stream()
                                .reduce(monoid.zero(), monoid::product);
         return product.equals(monoid.zero()) ? integer.toString() : representable.represent(product);
     }
@@ -25,7 +24,7 @@ public class MonoidalFizzBuzz<T, I extends Interpreter<T>, M extends Monoid<T>, 
     public static void main(String[] argv) {
         Function<Integer, String> mfb = new MonoidalFizzBuzz<>(
                 FizzBuzz.interpreter,
-                FizzBuzz.monoid,
+                FizzBuzz.stringMonoid,
                 FizzBuzz.representation);
 
         for (int i=1; i<=100; i++) {

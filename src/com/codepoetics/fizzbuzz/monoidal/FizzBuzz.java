@@ -6,25 +6,21 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public enum FizzBuzz implements Predicate<Integer> {
-    Fizz(i -> i % 3 == 0),
-    Buzz(i -> i % 5 == 0),
-    Bang(i -> i % 7 == 0);
+public class FizzBuzz  {
 
-    private final Predicate<Integer> predicate;
-    private FizzBuzz(Predicate<Integer> predicate) {
-        this.predicate = predicate;
+    static final StringMonoid stringMonoid = new StringMonoid();
+
+    private static String fizz(int n) { if(n % 3 == 0) return "Fizz"; else return stringMonoid.zero(); }
+
+    private static String buzz(int n) {
+        if(n % 5 == 0) return "Buzz"; else return stringMonoid.zero();
     }
 
-    @Override public boolean test(Integer i) { return predicate.test(i); }
+    private static String bang(int n) {
+        if(n % 5 != 0 && n % 3 != 0) return String.valueOf(n); else return stringMonoid.zero();
+    }
 
-    public static final ListMonoid<FizzBuzz> monoid = new ListMonoid<FizzBuzz>();
+    public static final Interpreter<String> interpreter = i -> Stream.of(fizz(i), buzz(i), bang(i));
 
-    public static final Interpreter<List<FizzBuzz>> interpreter = i -> Stream.of(FizzBuzz.values())
-            .filter(fb -> fb.test(i))
-            .map(Collections::<FizzBuzz>singletonList)
-            .collect(Collectors.toList());
-
-    public static final Representation<List<FizzBuzz>> representation = gs ->
-            String.join("", gs.stream().map(FizzBuzz::name).collect(Collectors.toList()));
+    public static final Representation<String> representation = gs -> gs;
 }
