@@ -1,7 +1,7 @@
 package com.codepoetics.fizzbuzz.monoidal;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface Interpreter<T> {
-    List<T> interpret(int i);
+    Stream<T> interpret(int i);
 }
